@@ -5,7 +5,7 @@
 - Relative Virtual Address (RVA): the address relative to the `ImageBase`, where the PE is loaded.
 
 
-### Process
+### Read EXE File
 
 *get exe file*
 
@@ -15,14 +15,14 @@ if (!exe_file)
 {
     // error
 }
-fseek(exe_file, 0L, SEEK_END);          // Get file size; put pointer at the end
+fseek(exe_file, 0L, SEEK_END);          // get file size; put pointer at the end
 int file_size = ftell(exe_file);
 fseek(exe_file, 0L, SEEK_SET);          // put the pointer back at the beginning
 char* exe_file_data = malloc(file_size + 1);    // allocate memory and read the whole file
 size_t n_read = fread(exe_file_data, 1, file_size, exe_file);   // read the whole file
 if (n_read != file_size)
 {
-    // errir
+    // error
 }
 
 // exe_file_data: the read exe-files
@@ -37,6 +37,8 @@ if (start_address)
     ((void(*)void) start_address)();    // call entry points
 }
 ```
+
+### Parse PE Header
 
 *parse dos header*
 
