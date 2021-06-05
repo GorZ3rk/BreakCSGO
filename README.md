@@ -1,3 +1,3 @@
-# csgo-rev-notes
+# csgo-rev
 
 - [notes](src/notes.md)
