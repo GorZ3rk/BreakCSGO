@@ -1,3 +1,4 @@
 # Contents
 
-- [notes](src/notes.md)
+- [csgo](src/notes.md)
+- [PE-packer](src/packer.md)
