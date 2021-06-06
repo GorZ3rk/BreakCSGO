@@ -7,5 +7,6 @@
 
 ## Contents
 
-- [csgo](src/csgo.md)
-- [PE-packer](src/packer.md)
+- [memory](doc/memory.md)
+- [csgo](doc/csgo.md)
+- [PE-packer](doc/packer.md)
