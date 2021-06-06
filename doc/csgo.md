@@ -67,5 +67,37 @@ struct variables
 ```
 
 
-### Triggerbot
+### TriggerBot
 
+
+
+
+### AimBot
+
+*calculate the distance*
+
+```C++
+struct vec3
+{
+    float x, y, z;  // location
+}
+
+vec3 operater+(const vec3 src, const vec3 dst)
+{
+    vec3 sum;
+    sum.x = src.x + dst.x;
+    sum.y = src.y + dst.y;
+    sum.z = src.z + dst.z;
+    return sum;
+}
+
+vec3 operator-(const vec3 src, const vec3 dst)
+{
+    vec3 diff;
+    diff.x = src.x - dst.x;
+    diff.y = src.y - dst.y;
+    diff.z = src.z - dst.z;
+    return diff;
+}
+
+```
