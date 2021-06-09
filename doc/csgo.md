@@ -1,6 +1,6 @@
 ### Memory Address
 
-*Some important stuffs to calculate the address*
+**Some important stuffs to calculate the address**
 
 ```
 value = baseAddress + offset
@@ -21,11 +21,11 @@ enermyHealth    = entity + health
 
 ### Structure
 
-*offset*
+**offset**
 
 [CSGO update offset GitHub](https://github.com/frk1/hazedumper)
 
-*for glow rendering*
+**for glow rendering**
 ```C++
 struct GlowStruct
 {
@@ -43,7 +43,7 @@ struct GlowStruct
 }
 ```
 
-*location structure*
+**location structure**
 ```C++
 struct vector
 {
@@ -53,7 +53,7 @@ struct vector
 
 
 
-*user-defined structure*
+**user-defined structure**
 
 ```C++
 struct variables
@@ -69,12 +69,164 @@ struct variables
 
 ### TriggerBot
 
+**key to activate**
+
+```C++ 
+// callback
+void TriggerBot()
+{
+    if (checkTriggerBot())
+        shoot();
+}
+```
+
+
+* **check haircross between 0 and 64**
+* **get enermy**
+* **calculate enermy health, must bigger than 0**
+
+```C++
+bool checkTriggerBot()
+{
+    int crosshair = readMemory<int>(localPlayer + crosshair);
+    if (crosshair != 0 && crosshair < 64)
+    {
+        uintptr_t entity = readMemory<uintptr_t>(gameModule + entityList + (crosshair - 1) * 0x10);
+        int eTeam = readMemory<int>(entity + team);
+        int eHealth = readMemory<int>(entity + health);
+
+        if (eTeam != myTeam && eHealth > 0)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+    else
+        return false;
+}
+```
+
+**shoot**
+
+```C++
+void shoot()
+{
+    Sleep(Delay)        // can use Distance
+    writeMemory<int>(gameModule + forceLeft, 5);
+    Sleep(20);
+    writeMemory<int>(gameModule + forceLeft, 4);
+}
+
+```
+
+**calculate Distance**
+
+```C++
+void getDistance(uintptr_t entity)
+{
+    vector myLocation = readMemory<vector>(localPlayer + vectorOrigin);
+    vector enermyLocation = readMemory<vector>(entity + vectorOrigin);
+
+    float distance = (sqrt(pow(myLocation.x - enermyLocation.x, 2)) +  sqrt(pow(myLocation.y - enermyLocation.y, 2)) sqrt(pow(myLocation.z - enermyLocation.z, 2))) * 0.0254;
+
+}
+
+```
+
+
+### Glow
+
+```C++
+GlowStruct SetGlowColor(GlowStruct Glow, uintptr_t entity)
+{
+    bool defusing = readMemory<bool>(entity + isdefusing);
+    if (defusing)
+    {
+        Glow.red = 1.0f;
+        Glow.green = 1.0f;
+        Glow.blue = 1.0f;
+        Glow.alpha = 1.0f;      // if enermy is defusing the bomb change color to white
+    }
+    else
+    {
+        int health = readMemory<int>(entity + health);
+        // Glow.red = health * -0.01 +1;
+        // Glow.green = health *0.01;
+
+        Glow.red = 1.0f;
+        Glow.green = health * -0.01 + 1;
+        Glow.blue = health * 0.01;
+        Glow.alpha = 1.0f;
+        // Glow.fullBloom = true;
+        // Glow.glowStyle = 1
+    }
+
+}
+
+```
+
+
+```C++
+void SetEnermyGlow(uintptr_t entity, int glowIndex)
+{
+    GlowStruct EGlow;
+    EGlow = readMemory<GlowStruct>(glowObject + (glowIndex * 0x38));
+    EGlow = SetGlowColor(EGlow, entity);
+    writeMemory<GlowStruct>(glowObject + (glowIndex * 0x38), EGlow);
+}
+```
+
+```C+
+void SetTeamGlow(uintptr_t entity, int glowIndex)
+{
+    GlowStruct TGlow;
+    TGlow = readMemory<GlowStruct>(glowObject + (glowIndex * 0x38));
+    TGlow.blue = 1.0f;
+    TGlow.alpha = 1.0f;
+    TGlow.renderwhenOccluded = true;
+    TGlow.renderwhenUnOccluded = false;
+    writeMemory<GlowStruct>(glowObject + (glowIndex * 0x38), TGlow);
+}
+
+```
+
+
+
+```C++
+void HandleGlow()
+{
+    uintptr_t glowObject = readMemory<uintptr_t>(gameModule + GlowObjectManager);
+    int myTeam = readMemory<int>(localPlayer + team);
+
+    for (i = 0; i<64; i++)
+    {
+        uintptr_t entity = readMemory<uintptr_t>(gameModule + entityList + i * 0x10);
+
+        if (entity != NULL)
+        {
+            int glowIndex = readMemory<int>(entity + GlowIndex);
+            int entityTeam = readMemory<int>(entity + team);
+
+            if (myTeam == entityTeam)
+                setTeamGlow(entity, glowIndex)
+            else
+                setEnermyGlow(entity, glowIndex)
+
+        }
+    }
+}
+
+```
+
+
+
 
 
 
 ### AimBot
 
-*calculate the distance*
+**calculate the distance**
 
 ```C++
 struct vec3
@@ -104,7 +256,7 @@ vec3 operator-(const vec3 src, const vec3 dst)
 
 
 internal
-```
+```C++
 #include "stdafx.h"
 #include <iostream>
 #include "csgo.h"
