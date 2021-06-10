@@ -17,6 +17,11 @@ entity          = gameModule + entityList + ((crosshair - 1) * 0x10)
 enermyTeam      = entity + team
 enermyLocation  = entity + vectorOrigin
 enermyHealth    = entity + health
+
+
+entity          = gameModule + entityList + entityID * 0x10
+spotted         = entity + isSpotted
+
 ```
 
 ### Structure
@@ -361,3 +366,7 @@ uintptr flashValue = readMemory<uintptr_t>(localPlayer + flashDuration);
 if (flashValue > 0)
     writeMemory<uintptr_t>(localPlayer + flashDuration, 0);
 ```
+
+### Radar-Hack
+
+**get the entity, set spotted**
