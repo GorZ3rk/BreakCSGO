@@ -177,7 +177,7 @@ void SetEnermyGlow(uintptr_t entity, int glowIndex)
 }
 ```
 
-```C+
+```C++
 void SetTeamGlow(uintptr_t entity, int glowIndex)
 {
     GlowStruct TGlow;
@@ -349,4 +349,15 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
     }
     return TRUE;
 }
+```
+
+
+### Anti-Flash
+
+**read memory, check the value if greater than 0, set it to zero**
+
+```C++
+uintptr flashValue = readMemory<uintptr_t>(localPlayer + flashDuration);
+if (flashValue > 0)
+    writeMemory<uintptr_t>(localPlayer + flashDuration, 0);
 ```
