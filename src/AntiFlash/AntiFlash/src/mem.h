@@ -20,6 +20,7 @@ public:
 	{
 		T val;
 		ReadProcessMemory(handle, (BYTE*)addr, &val, sizeof(T), NULL);
+		return val;
 	}
 
 	template <class T>

@@ -26,5 +26,8 @@
     <ClInclude Include="src\mem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\csgo.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
