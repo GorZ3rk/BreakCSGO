@@ -18,6 +18,7 @@ enermyTeam      = entity + team
 enermyLocation  = entity + vectorOrigin
 enermyHealth    = entity + health
 
+antiflash       = localPlayer + flashDuration
 
 entity          = gameModule + entityList + entityID * 0x10
 spotted         = entity + isSpotted
@@ -69,6 +70,18 @@ struct variables
     int myTeam;
     ...
 }
+```
+
+### Bhop
+
+
+```C++
+flag = readMemory<BYTE>(localPlayer + m_fFlags);
+if (GetAsyncKeyState(VK_SPACE) && flag & (1 << 0))
+{
+    writeMemory<uintptr_t>(gameModule + dwForceJump, 6);
+}
+
 ```
 
 
@@ -369,4 +382,15 @@ if (flashValue > 0)
 
 ### Radar-Hack
 
-**get the entity, set spotted**
+**get the entity, set spotted to true**
+
+```C++s
+for (short int i=0; i<64; i++)
+{
+    uintptr entity = readMemory<uintptr_t>(gameModule + entityList + i * 0x10);
+    if (entity != NULL)
+        writeMemory<bool>(entity + isSpotted, true);s
+}
+```
+
+
