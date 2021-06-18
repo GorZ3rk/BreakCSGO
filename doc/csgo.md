@@ -74,6 +74,16 @@ struct variables
 
 ### Bhop
 
+steps:
+
+* scan for unknown initial 4 byte value in CE
+* in the in-game console type +jump
+* search for changed value
+* type -jump
+* search for changed value
+* repeat until only a few addresses are remaining
+  
+
 
 ```C++
 flag = readMemory<BYTE>(localPlayer + m_fFlags);
